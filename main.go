@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"util"
 
-	"os"
+	"net/url"
 	"process"
 	"strings"
 )
@@ -33,7 +33,12 @@ func main() {
 	//headers := make(map[string]string)
 	//headers := process.CacheHeader()
 	//println(headers)
-	scan("127.0.0.1", "head", nil, 100)
+	u, _ := url.Parse("http://127.0.0.1/dede/DATA/#echuang#.asp/admin/manage/login.asp/reg_upload.asp/reg_upload.asp/upfile.asp/upfile.asp/upfile.asp")
+	println(strings.Contains(u.Path, "."))
+	println(u.Fragment)
+	println(u.Opaque)
+	println(u.Scheme)
+	scan("127.0.0.1", "head", nil, 10)
 }
 
 func scan(urlStr string, methodStr string, headers map[string]string, threadNum int) {
@@ -44,11 +49,11 @@ func scan(urlStr string, methodStr string, headers map[string]string, threadNum 
 	}
 
 	//urlList := process.CacheUrl("directories", "txt")
-	urlList := process.CacheUrl("directories/配置文件", "txt")
-	log.Println("urlList", urlList)
-	urlList = util.RemoveDuplicateMultiThread(urlList)
-	log.Println("urlList", urlList)
-	os.Exit(0)
+	urlList := process.CacheUrl("directories", "txt")
+	log.Println("urlList", len(urlList))
+	urlList = util.RemoveDuplicate1(urlList)
+	log.Println("urlList", len(urlList))
+
 	headerMap := process.CacheHeader()
 	log.Println("headerList", len(headerMap))
 
@@ -105,8 +110,16 @@ func scanThread(urlQueue chan string, methodStr string, headers map[string]strin
 			log.Println(urlStr, status)
 		}
 
-		if !strings.Contains(urlStr, ".") && (StatusCode == 200 || StatusCode == 403 || strings.HasPrefix(status, "30")) {
-			process.AppendUrl(urlQueue, urlStr, urlList)
+		u, err := url.Parse(urlStr)
+		//log.Println(u.Path, strings.Contains(u.Path, "."))
+		if err != nil {
+			log.Println("解析URL: " + urlStr + " 失败")
+			continue
+		}
+		//|| strings.HasPrefix(status, "30")
+		if !strings.Contains(u.Path+u.Fragment, ".") && (StatusCode == 200 || StatusCode == 403) {
+			go process.AppendUrl(urlQueue, urlStr, urlList)
+			log.Println("lenqueue:", len(urlQueue), urlStr)
 		}
 	}
 }

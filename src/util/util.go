@@ -1,6 +1,8 @@
 package util
 
-import "log"
+import (
+	"log"
+)
 
 //print slice
 func Dump(param []string) {
@@ -9,7 +11,19 @@ func Dump(param []string) {
 	}
 }
 
-func RemoveDuplicate(list []string, ret chan []string) {
+func RemoveDuplicate1(arr []string) (resArr []string) {
+	//resArr := make([]string, 0)
+	tmpMap := make(map[string]interface{})
+	for _, val := range arr {
+		if _, ok := tmpMap[val]; !ok {
+			resArr = append(resArr, val)
+			tmpMap[val] = struct{}{}
+		}
+	}
+	return resArr
+}
+
+/*func RemoveDuplicate(list []string, ret chan []string) {
 	var x []string = []string{}
 	for _, i := range list {
 		if len(x) == 0 {
@@ -27,9 +41,9 @@ func RemoveDuplicate(list []string, ret chan []string) {
 	}
 	//return x
 	ret <- x
-}
+}*/
 
-func RemoveDuplicateMultiThread(list []string) (ret []string) {
+/*func RemoveDuplicateMultiThread(list []string) (ret []string) {
 	listQueue := make(chan []string)
 	var listList [4][]string
 	listLen := len(list)
@@ -48,4 +62,4 @@ func RemoveDuplicateMultiThread(list []string) (ret []string) {
 	ret = <-listQueue
 	ret = append(ret, ret...)
 	return ret
-}
+}*/
