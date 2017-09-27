@@ -10,19 +10,10 @@ import (
 
 func FormatUrl(rawUrl string) (url string) {
 	url = strings.ToLower(rawUrl)
-	url = strings.TrimRight(url, "/")
 	if !strings.HasPrefix(url, "http:") {
 		url = "http://" + url
 	}
 	//println(urlStr)
-	lastSlash := strings.LastIndex(url, "/")
-	if lastSlash > len("http://") {
-		lastPath := url[lastSlash:]
-		if strings.Contains(lastPath, ".") {
-			url = url[:lastSlash]
-		}
-	}
-	url = url + "/"
 	return url
 }
 
@@ -37,7 +28,6 @@ func CheckUrl(urlStr string) bool {
 
 func CacheUrl(dirPath string, suffix string) (urls []string) {
 	urls = make([]string, 0, 128)
-
 	files, err := util.WalkDir(dirPath, suffix)
 	if err != nil {
 		log.Fatalln(err)
@@ -45,26 +35,21 @@ func CacheUrl(dirPath string, suffix string) (urls []string) {
 	log.Println(files)
 
 	for _, v := range files {
-		lines := util.ReadFile(v)
-		for _, line := range lines {
-			line = strings.Trim(line, "/")
-			urls = append(urls, line)
-		}
+		//urls = util.ReadFile(v)
+		urls = append(urls, util.ReadFile(v)...) // slice merge ...表示切片解构
 	}
 	return urls
 }
 
 // 进行URL合并和追加处理
 func AppendUrl(urlQueue chan string, appendUrl string, urlList []string) {
-	var mergedUrl string
 	for _, v := range urlList {
-		mergedUrl = mergeUrl(appendUrl, v)
-		urlQueue <- mergedUrl
+		urlQueue <- mergeUrl(appendUrl, v)
 	}
 }
 
 func mergeUrl(url1 string, url2 string) (url string) {
-	/*if (strings.HasSuffix(url1, "/") && !strings.HasPrefix(url2, "/")) || (!strings.HasSuffix(url1, "/") && strings.HasPrefix(url2, "/")) {
+	if (strings.HasSuffix(url1, "/") && !strings.HasPrefix(url2, "/")) || (!strings.HasSuffix(url1, "/") && strings.HasPrefix(url2, "/")) {
 		url = url1 + url2
 	}
 	if !strings.HasSuffix(url1, "/") && !strings.HasPrefix(url2, "/") {
@@ -72,8 +57,6 @@ func mergeUrl(url1 string, url2 string) (url string) {
 	}
 	if strings.HasSuffix(url1, "/") && strings.HasPrefix(url2, "/") {
 		url = strings.TrimRight(url1, "/") + url2
-	}*/
-	url = url1 + url2
-	log.Println("merge", url1, "\t", url2, "\t", url)
+	}
 	return url
 }
