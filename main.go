@@ -33,17 +33,18 @@ func main() {
 	//headers := make(map[string]string)
 	//headers := process.CacheHeader()
 	//println(headers)
-	u, _ := url.Parse("http://127.0.0.1/dede/DATA/#echuang#.asp/admin/manage/login.asp/reg_upload.asp/reg_upload.asp/upfile.asp/upfile.asp/upfile.asp")
-	println(strings.Contains(u.Path, "."))
-	println(u.Fragment)
-	println(u.Opaque)
-	println(u.Scheme)
-	scan("127.0.0.1", "head", nil, 10)
+	//u, _ := url.Parse("http://127.0.0.1/dede/DATA/#echuang#.asp/admin/manage/login.asp/reg_upload.asp/reg_upload.asp/upfile.asp/upfile.asp/upfile.asp")
+	//println(strings.Contains(u.Path, "."))
+	//println(u.Fragment)
+	//println(u.Opaque)
+	//println(u.Scheme)
+	scan("127.0.0.1/scantest/conn.asp", "head", nil, 10)
 }
 
 func scan(urlStr string, methodStr string, headers map[string]string, threadNum int) {
 	log.Println("threadNum:", threadNum)
 	urlStr = process.FormatUrl(urlStr)
+	log.Println(urlStr)
 	if !process.CheckUrl(urlStr) {
 		log.Fatalln("check url fail")
 	}
@@ -56,6 +57,8 @@ func scan(urlStr string, methodStr string, headers map[string]string, threadNum 
 
 	headerMap := process.CacheHeader()
 	log.Println("headerList", len(headerMap))
+
+	//os.Exit(1)
 
 	methodStr = strings.ToUpper(methodStr)
 
@@ -92,7 +95,7 @@ func scanThread(urlQueue chan string, methodStr string, headers map[string]strin
 			log.Println(err)
 		}
 
-		defer resp.Body.Close()
+		//defer resp.Body.Close()
 
 		/*body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -105,21 +108,21 @@ func scanThread(urlQueue chan string, methodStr string, headers map[string]strin
 
 		//返回的状态码
 		StatusCode := resp.StatusCode
-		status := resp.Status
+		/*status := resp.Status
 		if StatusCode != 404 {
 			log.Println(urlStr, status)
-		}
+		}*/
 
 		u, err := url.Parse(urlStr)
 		//log.Println(u.Path, strings.Contains(u.Path, "."))
 		if err != nil {
 			log.Println("解析URL: " + urlStr + " 失败")
-			continue
+			return
 		}
 		//|| strings.HasPrefix(status, "30")
 		if !strings.Contains(u.Path+u.Fragment, ".") && (StatusCode == 200 || StatusCode == 403) {
-			go process.AppendUrl(urlQueue, urlStr, urlList)
-			log.Println("lenqueue:", len(urlQueue), urlStr)
+			log.Println("lenqueue:", len(urlQueue), "urlList", len(urlList), urlStr)
+			process.AppendUrl(urlQueue, process.FormatUrl(urlStr), urlList)
 		}
 	}
 }
