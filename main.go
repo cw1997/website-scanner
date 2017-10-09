@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"util"
 
+	"flag"
 	"net/url"
 	"process"
 	"strings"
@@ -38,10 +39,14 @@ func main() {
 	//println(u.Fragment)
 	//println(u.Opaque)
 	//println(u.Scheme)
-	scan("127.0.0.1/scantest/conn.asp", "head", nil, 10)
+	urlStr := flag.String("url", "127.0.0.1/scantest/conn.asp", "please input a url")
+	method := flag.String("method", "HEAD", "please input a method")
+	headers := flag.String("header", "header.txt", "please input a header filename")
+	threadNum := flag.Int("thread", 20, "please input thread number")
+	scan(*urlStr, *method, *headers, *threadNum)
 }
 
-func scan(urlStr string, methodStr string, headers map[string]string, threadNum int) {
+func scan(urlStr string, methodStr string, headers string, threadNum int) {
 	log.Println("threadNum:", threadNum)
 	urlStr = process.FormatUrl(urlStr)
 	log.Println(urlStr)
@@ -55,7 +60,7 @@ func scan(urlStr string, methodStr string, headers map[string]string, threadNum 
 	urlList = util.RemoveDuplicate1(urlList)
 	log.Println("urlList", len(urlList))
 
-	headerMap := process.CacheHeader()
+	headerMap := process.CacheHeader(headers)
 	log.Println("headerList", len(headerMap))
 
 	//os.Exit(1)

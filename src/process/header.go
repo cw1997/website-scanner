@@ -5,8 +5,8 @@ import (
 	"util"
 )
 
-func CacheHeader() (headers map[string]string) {
-	headerText := util.ReadFile("header.txt")
+func CacheHeader(filename string) (headers map[string]string) {
+	headerText := util.ReadFile(filename)
 	headers = make(map[string]string)
 	//println(len(headerText))
 	for _, v := range headerText {
