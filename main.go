@@ -4,11 +4,14 @@ import (
 	"log"
 	"net/http"
 
-	"flag"
 	"strings"
 
 	"github.com/cw1997/website-scanner/process"
 	"github.com/cw1997/website-scanner/util"
+
+	//"github.com/gizak/termui"
+	termbox "github.com/nsf/termbox-go"
+	//"github.com/gizak/termui"
 )
 
 func main() {
@@ -39,13 +42,21 @@ func main() {
 	//println(u.Fragment)
 	//println(u.Opaque)
 	//println(u.Scheme)
-	urlStr := flag.String("url", "127.0.0.1/scantest/conn.asp", "please input a url")
+	/*urlStr := flag.String("url", "127.0.0.1/scantest/conn.asp", "please input a url")
 	method := flag.String("method", "HEAD", "please input a method")
 	headers := flag.String("header", "header.txt", "please input a header filename")
-	threadNum := flag.Int("thread", 20, "please input thread number")
+	threadNum := flag.Int("thread", 20, "please input thread number")*/
 	//println(process.GetHost(*urlStr))
+
+	err := termbox.Init()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	termbox.SetCell(0, 0, 'a', termbox.ColorGreen, termbox.ColorRed)
+	termbox.Sync()
+
 	//os.Exit(0)
-	scan(*urlStr, *method, *headers, *threadNum)
+	//scan(*urlStr, *method, *headers, *threadNum)
 }
 
 func scan(urlStr string, methodStr string, headers string, threadNum int) {
@@ -148,4 +159,8 @@ func scanThread(urlQueue chan string, resultQueue chan string, methodStr string,
 			process.AppendUrl(urlQueue, process.FormatUrl(urlStr), urlList)
 		}*/
 	}
+}
+
+func speedDisplay() {
+
 }
