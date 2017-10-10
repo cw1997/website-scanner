@@ -5,8 +5,18 @@ import (
 	"regexp"
 	"strings"
 
-	"util"
+	"net/url"
+
+	"github.com/cw1997/website-scanner/util"
 )
+
+func GetHost(urlStr string) string {
+	u, err := url.Parse(FormatUrl(urlStr))
+	if err != nil {
+		log.Fatalln("解析URL出错", err)
+	}
+	return u.Host
+}
 
 func FormatUrl(rawUrl string) (url string) {
 	url = strings.ToLower(rawUrl)
@@ -64,7 +74,7 @@ func AppendUrl(urlQueue chan string, appendUrl string, urlList []string) {
 }
 
 func mergeUrl(url1 string, url2 string) (url string) {
-	/*if (strings.HasSuffix(url1, "/") && !strings.HasPrefix(url2, "/")) || (!strings.HasSuffix(url1, "/") && strings.HasPrefix(url2, "/")) {
+	if (strings.HasSuffix(url1, "/") && !strings.HasPrefix(url2, "/")) || (!strings.HasSuffix(url1, "/") && strings.HasPrefix(url2, "/")) {
 		url = url1 + url2
 	}
 	if !strings.HasSuffix(url1, "/") && !strings.HasPrefix(url2, "/") {
@@ -72,8 +82,8 @@ func mergeUrl(url1 string, url2 string) (url string) {
 	}
 	if strings.HasSuffix(url1, "/") && strings.HasPrefix(url2, "/") {
 		url = strings.TrimRight(url1, "/") + url2
-	}*/
-	url = url1 + url2
-	log.Println("merge", url1, "\t", url2, "\t", url)
+	}
+	//url = url1 + url2
+	//log.Println("merge", url1, "\t", url2, "\t", url)
 	return url
 }

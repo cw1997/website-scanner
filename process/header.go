@@ -2,7 +2,8 @@ package process
 
 import (
 	"strings"
-	"util"
+
+	"github.com/cw1997/website-scanner/util"
 )
 
 func CacheHeader(filename string) (headers map[string]string) {

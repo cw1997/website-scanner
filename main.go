@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
-	"util"
 
 	"flag"
-	"net/url"
-	"process"
 	"strings"
+
+	"github.com/cw1997/website-scanner/process"
+	"github.com/cw1997/website-scanner/util"
 )
 
 func main() {
@@ -43,22 +43,24 @@ func main() {
 	method := flag.String("method", "HEAD", "please input a method")
 	headers := flag.String("header", "header.txt", "please input a header filename")
 	threadNum := flag.Int("thread", 20, "please input thread number")
+	//println(process.GetHost(*urlStr))
+	//os.Exit(0)
 	scan(*urlStr, *method, *headers, *threadNum)
 }
 
 func scan(urlStr string, methodStr string, headers string, threadNum int) {
-	log.Println("threadNum:", threadNum)
 	urlStr = process.FormatUrl(urlStr)
-	log.Println(urlStr)
+	log.Println("scan", urlStr)
 	if !process.CheckUrl(urlStr) {
 		log.Fatalln("check url fail")
 	}
 
-	//urlList := process.CacheUrl("directories", "txt")
+	log.Println("threadNum:", threadNum)
+
 	urlList := process.CacheUrl("directories", "txt")
-	log.Println("urlList", len(urlList))
+	log.Println("urlList(before remove duplicate1)", len(urlList))
 	urlList = util.RemoveDuplicate1(urlList)
-	log.Println("urlList", len(urlList))
+	log.Println("urlList(after remove duplicate1)", len(urlList))
 
 	headerMap := process.CacheHeader(headers)
 	log.Println("headerList", len(headerMap))
@@ -68,16 +70,29 @@ func scan(urlStr string, methodStr string, headers string, threadNum int) {
 	methodStr = strings.ToUpper(methodStr)
 
 	urlQueue := make(chan string)
+	resultQueue := make(chan string)
+
+	result := make(map[string]string)
+
+	go func(resultQueue chan string, result map[string]string) {
+		for urlInfo := range resultQueue {
+			ret := strings.SplitN(urlInfo, " ", 2) // 必须使用splitn，因为status可能含有空格
+			result[ret[0]] = ret[1]
+		}
+	}(resultQueue, result)
 
 	for i := 0; i < threadNum; i++ {
-		go scanThread(urlQueue, methodStr, headerMap, urlList)
+		go scanThread(urlQueue, resultQueue, methodStr, headerMap, urlList)
 	}
 
 	process.AppendUrl(urlQueue, urlStr, urlList)
+
+	process.OutputHtml(urlStr, result)
+
 }
 
 //扫描thread
-func scanThread(urlQueue chan string, methodStr string, headers map[string]string, urlList []string) {
+func scanThread(urlQueue chan string, resultQueue chan string, methodStr string, headers map[string]string, urlList []string) {
 	// get url from urlQueue channel
 	for urlStr := range urlQueue {
 		//log.Println(urlStr)
@@ -113,12 +128,15 @@ func scanThread(urlQueue chan string, methodStr string, headers map[string]strin
 
 		//返回的状态码
 		StatusCode := resp.StatusCode
-		/*status := resp.Status
+		status := resp.Status
+		result := urlStr + " " + status
+		log.Println(result)
 		if StatusCode != 404 {
-			log.Println(urlStr, status)
-		}*/
+			resultQueue <- result
+		}
 
-		u, err := url.Parse(urlStr)
+		//TODO: 这里本来要实现扫描到最后一个path为文件夹的情况下继续append到channel里等待下一轮扫描，但是运行时出现漏扫和死锁现象。
+		/*u, err := url.Parse(urlStr)
 		//log.Println(u.Path, strings.Contains(u.Path, "."))
 		if err != nil {
 			log.Println("解析URL: " + urlStr + " 失败")
@@ -128,6 +146,6 @@ func scanThread(urlQueue chan string, methodStr string, headers map[string]strin
 		if !strings.Contains(u.Path+u.Fragment, ".") && (StatusCode == 200 || StatusCode == 403) {
 			log.Println("lenqueue:", len(urlQueue), "urlList", len(urlList), urlStr)
 			process.AppendUrl(urlQueue, process.FormatUrl(urlStr), urlList)
-		}
+		}*/
 	}
 }
