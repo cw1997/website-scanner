@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79d28dee-178b-4b74-8dc5-0f9b9dcf2e76" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/directories/ASP.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/directories/ASPX.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/directories/DIR.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/directories/JSP.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/directories/MDB.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/directories/PHP.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/配置文件/ASP.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/配置文件/ASPX.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/配置文件/DIR.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/配置文件/JSP.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/配置文件/MDB.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/配置文件/PHP.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/配置文件/test/MDB.txt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/127.0.0.1.html" afterPath="$PROJECT_DIR$/127.0.0.1.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.go" afterPath="$PROJECT_DIR$/main.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,8 +17,8 @@
       <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="15" column="18" lean-forward="false" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="18" />
+            <state relative-caret-position="902">
+              <caret line="90" column="50" lean-forward="false" selection-start-line="90" selection-start-column="50" selection-end-line="90" selection-end-column="50" />
               <folding>
                 <element signature="e#14#165#0" expanded="true" />
               </folding>
@@ -245,7 +232,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29726776" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29726776" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -539,8 +526,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="18" lean-forward="false" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="18" />
+        <state relative-caret-position="902">
+          <caret line="90" column="50" lean-forward="false" selection-start-line="90" selection-start-column="50" selection-end-line="90" selection-end-column="50" />
           <folding>
             <element signature="e#14#165#0" expanded="true" />
           </folding>

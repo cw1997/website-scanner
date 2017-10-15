@@ -88,7 +88,8 @@ func scanThread(urlQueue chan string, resultQueue chan string, methodStr string,
 
 		resp, err := client.Do(req)
 		if err != nil {
-			log.Println(err)
+			log.Println(err, "服务器拒绝了该连接请求，请检查您要扫描的服务器是否已经宕机")
+			continue
 		}
 
 		//defer resp.Body.Close()
