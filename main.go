@@ -1,65 +1,32 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net/http"
-
 	"strings"
+	"time"
 
 	"github.com/cw1997/website-scanner/process"
 	"github.com/cw1997/website-scanner/util"
-
-	//"github.com/gizak/termui"
-	termbox "github.com/nsf/termbox-go"
-	//"github.com/gizak/termui"
 )
 
 func main() {
-	//接受URL
-	//校验URL
-	//缓存代理
-	//输出结果
-	//ScanThread("HEAD")
-	//CacheUrl()
-	//println(CheckUrl("www/s/3?a=1#b=2"))
-	//println(CheckUrl("www.me/s/3?a=1#b=2"))
-	//println(CheckUrl("changwei.me/s/3?a=1#b=2"))
-	//println(CheckUrl("..me/s/3?a=1#b=2"))
-	//println(CheckUrl("http://c.me/s/3?a=1#b=2"))
-	//println(CheckUrl("https://c.me/s/3?a=1#b=2"))
-	//println(CheckUrl("https//c.me/s/3?a=1#b=2"))
-	//println(CheckUrl("https:/c.me/s/3?a=1#b=2"))
-	//println(len(process.CacheUrl("directories", "txt")))
-	//println()
-	//util.Dump(util.ReadFile("directories\\配置文件\\DIR.txt"))
-	//util.Dump(process.CacheHeader())
-	//var headers map[string]string
-	//headers := make(map[string]string)
-	//headers := process.CacheHeader()
-	//println(headers)
-	//u, _ := url.Parse("http://127.0.0.1/dede/DATA/#echuang#.asp/admin/manage/login.asp/reg_upload.asp/reg_upload.asp/upfile.asp/upfile.asp/upfile.asp")
-	//println(strings.Contains(u.Path, "."))
-	//println(u.Fragment)
-	//println(u.Opaque)
-	//println(u.Scheme)
-	/*urlStr := flag.String("url", "127.0.0.1/scantest/conn.asp", "please input a url")
+	urlStr := flag.String("url", "127.0.0.1/scantest/conn.asp", "please input a url")
 	method := flag.String("method", "HEAD", "please input a method")
 	headers := flag.String("header", "header.txt", "please input a header filename")
-	threadNum := flag.Int("thread", 20, "please input thread number")*/
-	//println(process.GetHost(*urlStr))
+	threadNum := flag.Int("thread", 10, "please input thread number")
+	directoriesPath := flag.String("path", "字典", "please input directories path")
+	suffix := flag.String("extname", "txt", "please input directories file extname")
 
-	err := termbox.Init()
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-	termbox.SetCell(0, 0, 'a', termbox.ColorGreen, termbox.ColorRed)
-	termbox.Sync()
-
-	//os.Exit(0)
-	//scan(*urlStr, *method, *headers, *threadNum)
+	startTime := time.Now().Unix()
+	scan(*urlStr, *method, *headers, *threadNum, *directoriesPath, *suffix)
+	endTime := time.Now().Unix()
+	fmt.Println("spend time:", endTime-startTime, "s")
 }
 
-func scan(urlStr string, methodStr string, headers string, threadNum int) {
+func scan(urlStr string, methodStr string, headers string, threadNum int, directoriesPath string, suffix string) {
 	urlStr = process.FormatUrl(urlStr)
 	log.Println("scan", urlStr)
 	if !process.CheckUrl(urlStr) {
@@ -68,15 +35,13 @@ func scan(urlStr string, methodStr string, headers string, threadNum int) {
 
 	log.Println("threadNum:", threadNum)
 
-	urlList := process.CacheUrl("directories", "txt")
+	urlList := process.CacheUrl(directoriesPath, suffix)
 	log.Println("urlList(before remove duplicate1)", len(urlList))
 	urlList = util.RemoveDuplicate1(urlList)
 	log.Println("urlList(after remove duplicate1)", len(urlList))
 
 	headerMap := process.CacheHeader(headers)
 	log.Println("headerList", len(headerMap))
-
-	//os.Exit(1)
 
 	methodStr = strings.ToUpper(methodStr)
 
@@ -87,7 +52,7 @@ func scan(urlStr string, methodStr string, headers string, threadNum int) {
 
 	go func(resultQueue chan string, result map[string]string) {
 		for urlInfo := range resultQueue {
-			ret := strings.SplitN(urlInfo, " ", 2) // 必须使用splitn，因为status可能含有空格
+			ret := strings.SplitN(urlInfo, " ", 2) // 必须使用splitn且n=2，因为status可能含有空格
 			result[ret[0]] = ret[1]
 		}
 	}(resultQueue, result)
@@ -159,8 +124,4 @@ func scanThread(urlQueue chan string, resultQueue chan string, methodStr string,
 			process.AppendUrl(urlQueue, process.FormatUrl(urlStr), urlList)
 		}*/
 	}
-}
-
-func speedDisplay() {
-
 }
